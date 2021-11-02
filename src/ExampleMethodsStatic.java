@@ -4,7 +4,7 @@
  * @author Omar M. Radwan
  * @version Demo
  */
-public class ExampleMethods {
+public class ExampleMethodsStatic {
     public static void printName(String name) {
         System.out.println("Hello, my name is " + name + "!");
     }

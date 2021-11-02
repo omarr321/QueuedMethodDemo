@@ -8,14 +8,16 @@ import java.lang.reflect.Method;
  */
 public class Main {
     public static void main(String[] args) {
+        System.out.println("Starting static example...");
+
         System.out.print("Getting Methods...");
         Method favNum = null;
         Method favAnimal = null;
         Method printName = null;
         try {
-            favNum = ExampleMethods.class.getMethod("favNum", int.class);
-            favAnimal = ExampleMethods.class.getMethod("favAnimal", String.class);
-            printName = ExampleMethods.class.getMethod("printName", String.class);
+            favNum = ExampleMethodsStatic.class.getMethod("favNum", int.class);
+            favAnimal = ExampleMethodsStatic.class.getMethod("favAnimal", String.class);
+            printName = ExampleMethodsStatic.class.getMethod("printName", String.class);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -47,7 +49,59 @@ public class Main {
         System.out.println("DONE!");
 
         System.out.println("Running \"test\"...");
-
         test.run();
+
+        System.out.println("Starting dynamic example...");
+
+        System.out.print("Getting Methods...");
+        favNum = null;
+        favAnimal = null;
+        printName = null;
+        try {
+            favNum = ExampleMethodsDynamic.class.getMethod("setFavNum", int.class);
+            favAnimal = ExampleMethodsDynamic.class.getMethod("setFavAnimal", String.class);
+            printName = ExampleMethodsDynamic.class.getMethod("setName", String.class);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        System.out.println("DONE!");
+
+        System.out.print("Creating ExampleMethodsDynamic \"exDyn\"...");
+        ExampleMethodsDynamic exDyn = new ExampleMethodsDynamic();
+        System.out.println("DONE!");
+
+        System.out.print("Creating MethodWrapper for favNum...");
+        favNumW = new MethodWrapper(favNum, exDyn);
+        favNumW.addArg(124);
+        System.out.println("DONE!");
+
+        System.out.print("Creating MethodWrapper for favAnimal...");
+        favAnimalW = new MethodWrapper(favAnimal, exDyn);
+        favAnimalW.addArg("dog");
+        System.out.println("DONE!");
+
+        System.out.print("Creating MethodWrapper for printName...");
+        printNameW = new MethodWrapper(printName, exDyn);
+        printNameW.addArg("Bill");
+        System.out.println("DONE!");
+
+        System.out.print("Creating TestClass \"test\" instance...");
+        test = new TestClass();
+        System.out.println("DONE!");
+
+        System.out.print("Adding methods to \"test\"...");
+        test.addMethod(printNameW);
+        test.addMethod(favAnimalW);
+        test.addMethod(favNumW);
+        System.out.println("DONE!");
+
+        System.out.println("Values before test run...");
+        exDyn.run();
+
+        System.out.println("Running \"test\"...");
+        test.run();
+
+        System.out.println("Values after test run...");
+        exDyn.run();
     }
 }

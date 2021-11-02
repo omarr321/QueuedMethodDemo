@@ -12,9 +12,15 @@ public class MethodWrapper {
     private Object[] args = new Object[10];
     private Method method;
     private int count = 0;
+    private Object instantRef = null;
 
     public MethodWrapper(Method method) {
+        this(method, null);
+    }
+
+    public MethodWrapper(Method method, Object instantRef){
         this.method = method;
+        this.instantRef = instantRef;
     }
 
     public void addArg(Object arg) {
@@ -25,7 +31,7 @@ public class MethodWrapper {
     public void run() {
         Object[] arg = Arrays.copyOfRange(args, 0, count);
         try {
-            method.invoke(null, arg);
+            method.invoke(instantRef, arg);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
